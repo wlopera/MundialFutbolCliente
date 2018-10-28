@@ -1,0 +1,74 @@
+plugins {
+  id 'java'
+  id 'project-report'
+}
+
+  apply plugin: 'eclipse'
+  apply plugin: 'maven'
+  
+repositories {
+  jcenter()
+}
+
+sourceCompatibility = 10
+targetCompatibility = 10
+
+configurations {
+  wsdl2java
+}
+
+dependencies {
+  compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.2.2'
+  compile 'org.apache.cxf:cxf-rt-transports-http:3.2.2'
+
+  compile 'javax.xml.ws:jaxws-api:2.3.0'
+  compile 'javax.jws:jsr181-api:1.0-MR1'
+  compile 'javax.xml.bind:jaxb-api:2.3.0'
+  compile 'javax.activation:javax.activation-api:1.2.0'
+  compile 'javax.annotation:javax.annotation-api:1.3'
+
+  wsdl2java 'javax.xml.bind:jaxb-api:2.3.0'
+  wsdl2java 'com.sun.xml.bind:jaxb-ri:2.3.0'
+  wsdl2java 'com.sun.xml.bind:jaxb-xjc:2.3.0'
+  wsdl2java 'com.sun.xml.bind:jaxb-core:2.3.0'
+  wsdl2java 'com.sun.xml.bind:jaxb-impl:2.3.0'
+
+  wsdl2java 'javax.activation:javax.activation-api:1.2.0'
+  wsdl2java 'javax.annotation:javax.annotation-api:1.3'
+  wsdl2java 'javax.xml.ws:jaxws-api:2.3.0'
+  wsdl2java 'javax.jws:jsr181-api:1.0-MR1'
+
+  wsdl2java 'org.apache.cxf:cxf-tools-wsdlto-core:3.2.2'
+  wsdl2java 'org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:3.2.2'
+  wsdl2java 'org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:3.2.2'
+}
+
+def wsdl2java = task generateJavaFromWsdl(type: JavaExec) {
+  String wsdl = 'src/main/resources/clientecmfservicio.wsdl'
+  String genSrcDir = "com.wlopera.cliente.cmf.soap"
+
+  inputs.file wsdl
+  outputs.dir genSrcDir
+
+  classpath configurations.wsdl2java
+  main "org.apache.cxf.tools.wsdlto.WSDLToJava"
+
+  args '-encoding', 'UTF-8', '-d', genSrcDir, wsdl
+
+  OutputStream baos = new ByteArrayOutputStream()
+  errorOutput = new OutputStream() {
+    void write(int b) {System.err.write(b); baos.write(b) }  
+    void flush() { System.err.flush(); baos.flush() }
+    void close() { System.err.close(); baos.close() }
+  }
+
+  doLast {
+  def str = baos.toString()
+  if (str.contains('Usage : wsdl2java') || str.contains('WSDLToJava Error')) {
+  throw new TaskExecutionException(tasks[name], 
+  new IOException('Apache CXF WSDLToJava has failed. Please see System.err output.'))
+  }
+  }
+}
+compileJava.dependsOn += wsdl2java
+sourceSets.main.java.srcDirs = ['src/main/java', 'build/generated-sources/cxf-ws']
