@@ -95,12 +95,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnio }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnio }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnio }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getCMFPorAnnio")
     public JAXBElement<GetCMFPorAnnio> createGetCMFPorAnnio(GetCMFPorAnnio value) {
@@ -108,12 +104,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnioResponse }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnioResponse }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetCMFPorAnnioResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getCMFPorAnnioResponse")
     public JAXBElement<GetCMFPorAnnioResponse> createGetCMFPorAnnioResponse(GetCMFPorAnnioResponse value) {
@@ -121,12 +113,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanado }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanado }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanado }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getListaCMFPorCampeonatoGanado")
     public JAXBElement<GetListaCMFPorCampeonatoGanado> createGetListaCMFPorCampeonatoGanado(GetListaCMFPorCampeonatoGanado value) {
@@ -134,12 +122,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanadoResponse }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanadoResponse }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetListaCMFPorCampeonatoGanadoResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getListaCMFPorCampeonatoGanadoResponse")
     public JAXBElement<GetListaCMFPorCampeonatoGanadoResponse> createGetListaCMFPorCampeonatoGanadoResponse(GetListaCMFPorCampeonatoGanadoResponse value) {
@@ -147,12 +131,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodos }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodos }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodos }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getListaCMFTodos")
     public JAXBElement<GetListaCMFTodos> createGetListaCMFTodos(GetListaCMFTodos value) {
@@ -160,12 +140,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodosResponse }{@code >}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodosResponse }{@code >}}
      * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetListaCMFTodosResponse }{@code >}
      */
     @XmlElementDecl(namespace = "http://cliente.wlopera.com/", name = "getListaCMFTodosResponse")
     public JAXBElement<GetListaCMFTodosResponse> createGetListaCMFTodosResponse(GetListaCMFTodosResponse value) {
