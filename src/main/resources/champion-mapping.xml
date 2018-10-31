@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-id="champion">
+		<class-a>com.wlopera.cliente.cmf.soap.Campeonato</class-a>
+		<class-b>com.wlopera.api.ChampionDTO</class-b>
+		<field>
+			<a>annio</a>
+			<b>year</b>
+		</field>
+		<field>
+			<a>nombreCampeon</a>
+			<b>championName</b>
+		</field>
+		<field>
+			<a>nombreSede</a>
+			<b>headquarter</b>
+		</field>	
+		<field>
+			<a>nonbreSubcampeon</a>
+			<b>subChampionName</b>
+		</field>		 			
+		<field>
+			<a>resultado</a>
+			<b>result</b>
+		</field>		 			
+	</mapping>
+</mappings>
