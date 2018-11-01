@@ -16,6 +16,8 @@ dependencies {
   wsdl2java 'org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:3.2.2'
   wsdl2java 'org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:3.2.2'
   
+  compile 'net.sf.dozer:dozer:5.0'
+    
 }
 
 def wsdl2java = task generateJavaFromWsdl(type: JavaExec) {
