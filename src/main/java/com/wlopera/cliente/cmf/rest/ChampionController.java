@@ -36,18 +36,27 @@ public class ChampionController {
 	// http://localhost:8585/
 	@RequestMapping("/")
 	public String home() {
-		System.out.println("Levantar Controlador y Servicios");
 		return "index";
 	}
 
 	/**
-	 * Go to champion.
+	 * Servicio Rest Data listado de annios jugados y cantidad de torneos ganados
 	 * 
-	 * @return
+	 * @return Listado de datos
 	 */
-	@RequestMapping("/champion")
-	public String goHome() {
-		return "champion";
+	// http://localhost:8585/champion/allChampions
+	@RequestMapping(value = "/champion/data")
+	@ResponseBody
+	public DataWrapper getData() {
+
+		System.out.println("Inicio consulta servicio rest getData");
+		DataWrapper wrapper = new DataWrapper();
+
+		wrapper.setYears(ChampionUtil.getYears());
+		wrapper.setQtys(ChampionUtil.getChampionsWinQty());
+		
+		return wrapper;
+
 	}
 
 	/**
@@ -61,11 +70,10 @@ public class ChampionController {
 	public ChampionWrapper getAllChampions() {
 
 		System.out.println("Inicio consulta servicio rest ChampionWrapper");
-		ChampionWrapper clientWrapper = new ChampionWrapper();
+		ChampionWrapper wrapper = new ChampionWrapper();
 
-		clientWrapper.setChampions(swcsApi.getListChampionsWin());
-		System.out.println("getAllChampions: " + clientWrapper.getChampions().toString());
-		return clientWrapper;
+		wrapper.setChampions(swcsApi.getListChampionsWin());
+		return wrapper;
 
 	}
 
@@ -80,14 +88,15 @@ public class ChampionController {
 	public ChampionWrapper getChampionByYear(@PathVariable("year") String year) {
 
 		System.out.println("Inicio consulta servicio rest getChampionByYear para el año: " + year);
-		ChampionWrapper clientWrapper = new ChampionWrapper();
+		ChampionWrapper wrapper = new ChampionWrapper();
 
 		List<ChampionDTO> champions = new ArrayList<>();
 		champions.add(swcsApi.getChampionByYear(year));
 
-		clientWrapper.setChampions(champions);
-		System.out.println("getChampionByYear: " + clientWrapper.getChampions().toString());
-		return clientWrapper;
+		wrapper.setChampions(champions);
+		
+		System.out.println("getChampionByYear: " + wrapper.getChampions().toString());
+		return wrapper;
 
 	}
 
@@ -103,11 +112,12 @@ public class ChampionController {
 	public ChampionWrapper getChampionsByWins(@PathVariable("numberWins") String numberWins) {
 
 		System.out.println("Inicio consulta servicio rest getChampionsByWins para partidos ganados: " + numberWins);
-		ChampionWrapper clientWrapper = new ChampionWrapper();
+		ChampionWrapper wrapper = new ChampionWrapper();
 
-		clientWrapper.setChampions(swcsApi.getListChampionsWinByQty(numberWins));
-		System.out.println("getChampionsByWins: " + clientWrapper.getChampions().toString());
-		return clientWrapper;
+		wrapper.setChampions(swcsApi.getListChampionsWinByQty(numberWins));
+		
+		System.out.println("getChampionsByWins: " + wrapper.getChampions().toString());
+		return wrapper;
 
 	}
 }
