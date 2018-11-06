@@ -4,6 +4,8 @@ Cliente que consume Servicio Web. Que permita consultar datos de los campeonatos
 
 Uso de Gradle - STS - Eclipse
 
+@wlopera/William Lopera - Nov 2018 
+
 ### Campeones mundiales
 Listado de paises campeones de mundiales:
 
@@ -1425,11 +1427,15 @@ Nota: uso de Patrón MVC
 
 ![data](https://user-images.githubusercontent.com/7141537/48037852-2e8bc780-e13c-11e8-96ad-68c075ba76ba.png)
 
+Resultado :+1:
+
 ![data](https://user-images.githubusercontent.com/7141537/48037893-4d8a5980-e13c-11e8-9d97-bcf24aa667ad.png)
 
 ### Consulta de todos los campeonatos ganados por un país por cantidad de ganados
 
 ![data](https://user-images.githubusercontent.com/7141537/48037913-6d218200-e13c-11e8-80fe-32739934732d.png)
+
+Resultado :+1:
 
 ![data](https://user-images.githubusercontent.com/7141537/48037936-80345200-e13c-11e8-986c-fa4febc41852.png)
 
