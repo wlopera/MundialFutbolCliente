@@ -1168,7 +1168,11 @@ server:
 ```
 ***
 
-***AngularJS - Liberias modulo/controlador***
+### AngularJS
+
+![data](https://user-images.githubusercontent.com/7141537/48037510-92ad8c00-e13a-11e8-9a99-aab84e266a0a.png)
+
+***Liberias modulo/controlador***
 
 ***
 ```
@@ -1235,7 +1239,7 @@ MyApp.controller("MyController",["$scope", "service", function($scope, service){
 ```
 ***
 
-***AngularJS - Liberias servicios***
+***Liberias servicios***
 
 ***
 ```
@@ -1394,18 +1398,41 @@ MyApp.factory('service', ['$http', function($http) {
 
 Nota: uso de Patrón MVC
 
-***AngularJS - Liberias modulo/servicios/controlador [Patrón MVC]***
+## Probar Aplicación
 
-***
-```
-```
-***
+**1. Levantar Servicios WEB**
 
-***AngularJS - Liberias modulo/servicios/controlador [Patrón MVC]***
+![salida-1](https://user-images.githubusercontent.com/7141537/48014372-83a3eb00-e0f4-11e8-9020-04c3893c8cb9.png)
 
-***
-```
-```
-***
+**Probar Conexión**
+
+![wsdl-sal](https://user-images.githubusercontent.com/7141537/48014218-30319d00-e0f4-11e8-8c6c-a6b4f41cf3e6.png)
+
+![wsdl-sal-a](https://user-images.githubusercontent.com/7141537/48014216-2f990680-e0f4-11e8-8fa1-de93c949ca58.png)
+
+
+**2. Levantar Servicios REST**
+
+![data](https://user-images.githubusercontent.com/7141537/48037691-85dd6800-e13b-11e8-89c2-011fdc7c84cc.png)
+
+**3. Levantar navegador [http://localhost:8585/]**
+
+**Consulta de todos los campeonatos**
+
+![sin titulo](https://user-images.githubusercontent.com/7141537/48037808-04d2a080-e13c-11e8-87ff-f654a35f4567.png)
+
+**Consulta de campeonato ganado para un año requerido**
+
+![data](https://user-images.githubusercontent.com/7141537/48037852-2e8bc780-e13c-11e8-96ad-68c075ba76ba.png)
+
+![data](https://user-images.githubusercontent.com/7141537/48037893-4d8a5980-e13c-11e8-9d97-bcf24aa667ad.png)
+
+**Consulta de todos los campeonatos ganados por un país por cantidad de ganados**
+
+![data](https://user-images.githubusercontent.com/7141537/48037913-6d218200-e13c-11e8-80fe-32739934732d.png)
+![data](https://user-images.githubusercontent.com/7141537/48037936-80345200-e13c-11e8-986c-fa4febc41852.png)
+
+
+
 
 
