@@ -1417,19 +1417,20 @@ Nota: uso de Patrón MVC
 
 **3. Levantar navegador [http://localhost:8585/]**
 
-**Consulta de todos los campeonatos**
+### Consulta de todos los campeonatos
 
 ![sin titulo](https://user-images.githubusercontent.com/7141537/48037808-04d2a080-e13c-11e8-87ff-f654a35f4567.png)
 
-**Consulta de campeonato ganado para un año requerido**
+### Consulta de campeonato ganado para un año requerido
 
 ![data](https://user-images.githubusercontent.com/7141537/48037852-2e8bc780-e13c-11e8-96ad-68c075ba76ba.png)
 
 ![data](https://user-images.githubusercontent.com/7141537/48037893-4d8a5980-e13c-11e8-9d97-bcf24aa667ad.png)
 
-**Consulta de todos los campeonatos ganados por un país por cantidad de ganados**
+### Consulta de todos los campeonatos ganados por un país por cantidad de ganados
 
 ![data](https://user-images.githubusercontent.com/7141537/48037913-6d218200-e13c-11e8-80fe-32739934732d.png)
+
 ![data](https://user-images.githubusercontent.com/7141537/48037936-80345200-e13c-11e8-986c-fa4febc41852.png)
 
 
