@@ -119,7 +119,7 @@ Nota: Se puede correr el comango **git install** [uso git]
 
 ![gradle-2](https://user-images.githubusercontent.com/7141537/48036097-d8675600-e134-11e8-9213-8e8b974f9f8b.png)
 
-**Codigo genrado**
+**Codigo generado**
 
 Entre otros
 
@@ -430,17 +430,363 @@ public class ClienteCMFServicioService extends Service {
 ```
 ***
 
-***I.- Clase modelo de dato***
+***Interface para exponer los Servicios Web del Cliente [API expone los servicios del cliente - LEGADO]***
 
 ***
 ```
+package com.wlopera.cliente.cmf.api;
+
+import java.util.List;
+
+import com.wlopera.cliente.cmf.soap.Campeonato;
+
+public interface MundialFutbolClienteApi {
+
+	/**
+	 * Consultar la lista de paises ganadores de una cantidad especifica de
+	 * mundiales de futbol
+	 * 
+	 * @param numeroCMFGanados Cantidad de campeonatos ganados
+	 * 
+	 * @return Listado de paises que solo han ganado esa cantidad exacta de
+	 *         campeonatos
+	 */
+	List<Campeonato> getListaCMFPorCampeonatoGanado(String numeroCMFGanados);
+
+	/**
+	 * Consulta todos los paises ganadores de campeones mundiales de futbol
+	 * 
+	 * @return Listado de paises gnadores de mundiales
+	 */
+	List<Campeonato> getListaCMFTodos();
+
+	/**
+	 * Consultar el pais ganador del mundial de un annio requerido
+	 * 
+	 * @param year Annio del mundial
+	 * 
+	 * @return Pais que gano el campeonato ese annio
+	 */
+	Campeonato getCMFPorAnnio(String annio);
+}
 ```
 ***
 
-***I.- Clase modelo de dato***
+***Implementación de los Servicios Web del Cliente [exponer servicios del cliente]***
+
+***
+```package com.wlopera.cliente.cmf.api;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+
+import com.wlopera.cliente.cmf.soap.Campeonato;
+import com.wlopera.cliente.cmf.soap.ClienteCMFServicio;
+
+public class MundialFutbolClienteImpl implements MundialFutbolClienteApi {
+
+	private static ClienteCMFServicio instance = null;
+
+	// retorna la instancia singleton creada
+	public static ClienteCMFServicio getInstance() {
+
+		if (null == instance) {
+			JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+
+			// Agregar el endpoint del WSDL
+			factory.setAddress("http://localhost:8080/MundialesFutbol/services/ClienteCMFServicioPort");
+
+			// Uso de clase autogenerada por Apache CXF wsdl2java
+			factory.setServiceClass(ClienteCMFServicio.class);
+
+			instance = (ClienteCMFServicio) factory.create();
+		}
+		return instance;
+	}
+
+	@Override
+	public List<Campeonato> getListaCMFPorCampeonatoGanado(String numeroCMFGanados) {
+		List<Campeonato> campeones = new ArrayList<>();
+		try {
+			campeones = getInstance().getListaCMFPorCampeonatoGanado(numeroCMFGanados);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return campeones;
+	}
+
+	@Override
+	public List<Campeonato> getListaCMFTodos() {
+		List<Campeonato> campeones = new ArrayList<>();
+		try {
+			campeones = getInstance().getListaCMFTodos();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return campeones;
+	}
+
+	@Override
+	public Campeonato getCMFPorAnnio(String annio) {
+		Campeonato campeonato = new Campeonato();
+		try {
+			campeonato = getInstance().getCMFPorAnnio(annio);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return campeonato;
+	}
+
+	public static void main(String[] arg) {
+		MundialFutbolClienteImpl cmf = new MundialFutbolClienteImpl();
+		List<Campeonato> campeones = cmf.getListaCMFTodos();
+		for (Campeonato campeon : campeones) {
+			System.out.println(campeon.getAnnio() + " -- " + campeon.getNombreCampeon() + " -- "
+					+ campeon.getNonbreSubcampeon() + " -- " + campeon.getResultado());
+		}
+	}
+}
+```
+***
+
+**2. Api para exponer los servicios**
+
+![data](https://user-images.githubusercontent.com/7141537/48036506-b8d12d00-e136-11e8-9de7-351b6d45b1fb.png)
+
+***Modelo de negocio***
 
 ***
 ```
+package com.wlopera.api;
+
+import java.io.Serializable;
+
+public class ChampionDTO implements Serializable {
+
+	private static final long serialVersionUID = -2527025805502767454L;
+
+	private int year;
+	private String championName;
+	private String headquarter;
+	private String subChampionName;
+	private String result;
+
+	public ChampionDTO() {}
+	
+	public ChampionDTO(int year, String championName, String headquarter, String subChampionName, String result) {
+		this.year = year;
+		this.championName = championName;
+		this.headquarter = headquarter;
+		this.subChampionName = subChampionName;
+		this.result = result;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getChampionName() {
+		return championName;
+	}
+
+	public void setChampionName(String championName) {
+		this.championName = championName;
+	}
+
+	public String getHeadquarter() {
+		return headquarter;
+	}
+
+	public void setHeadquarter(String headquarter) {
+		this.headquarter = headquarter;
+	}
+
+	public String getSubChampionName() {
+		return subChampionName;
+	}
+
+	public void setSubChampionName(String subChampionName) {
+		this.subChampionName = subChampionName;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	@Override
+	public String toString() {
+		return "Champion [year=" + year + ", championName=" + championName + ", headquarter=" + headquarter
+				+ ", subChampionName=" + subChampionName + ", result=" + result + "]";
+	}
+
+}
+```
+***
+
+***Interface API***
+
+***
+```
+package com.wlopera.api;
+
+import java.util.List;
+
+public interface SoccerWorldChampionshipApi {
+
+	/**
+	 * Consultar la lista de paises ganadores de una cantidad especifica de
+	 * mundiales de futbol
+	 * 
+	 * @param numeroCMFGanados Cantidad de campeonatos ganados
+	 * 
+	 * @return Listado de paises que solo han ganado esa cantidad exacta de
+	 *         campeonatos
+	 */
+	List<ChampionDTO> getListChampionsWinByQty(String qty);
+
+	/**
+	 * Consulta todos los paises ganadores de campeones mundiales de futbol
+	 * 
+	 * @return Listado de paises gnadores de mundiales
+	 */
+	List<ChampionDTO> getListChampionsWin();
+
+	/**
+	 * Consultar el pais ganador del mundial de un annio requerido
+	 * 
+	 * @param year Annio del mundial
+	 * 
+	 * @return Pais que gano el campeonato ese annio
+	 */
+	ChampionDTO getChampionByYear(String year);
+}
+```
+***
+
+***Implementación del API***
+
+***
+```
+package com.wlopera.api;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dozer.DozerBeanMapper;
+
+import com.wlopera.cliente.cmf.api.MundialFutbolClienteImpl;
+import com.wlopera.cliente.cmf.soap.Campeonato;
+
+public class SoccerWorldChampionshipImpl implements SoccerWorldChampionshipApi {
+
+	private static MundialFutbolClienteImpl instance = null;
+
+	// retorna la instancia singleton creada
+	public static MundialFutbolClienteImpl getInstance() {
+
+		if (null == instance) {
+
+			instance = new MundialFutbolClienteImpl();
+		}
+		return instance;
+	}
+
+	@Override
+	public List<ChampionDTO> getListChampionsWinByQty(String qty) {
+
+		List<Campeonato> campeonatos = getInstance().getListaCMFPorCampeonatoGanado(qty);
+		
+		List<ChampionDTO> champions = new ArrayList<>();
+		
+		for (Campeonato campeonato : campeonatos) {
+			champions.add(getChampionByDozer(campeonato));			
+		}
+		System.out.println(champions.toString());
+		return champions;
+	}
+
+	@Override
+	public List<ChampionDTO> getListChampionsWin() {
+
+		List<Campeonato> campeonatos = getInstance().getListaCMFTodos();
+
+		List<ChampionDTO> champions = new ArrayList<>();
+		
+		for (Campeonato campeonato : campeonatos) {
+			champions.add(getChampionByDozer(campeonato));			
+		}
+		System.out.println(champions.toString());
+		return champions;
+	}
+
+	@Override
+	public ChampionDTO getChampionByYear(String year) {
+
+		ChampionDTO champion = getChampionByDozer(getInstance().getCMFPorAnnio(year));
+	
+		System.out.println(champion.toString());
+		
+		return champion;
+	}
+
+	private ChampionDTO getChampionByDozer(Campeonato campeonato) {
+
+		List<String> list = new ArrayList<>();
+
+		list.add("champion-mapping.xml");
+
+		DozerBeanMapper mapper = new DozerBeanMapper();
+
+		mapper.setMappingFiles(list);
+
+		ChampionDTO champion = new ChampionDTO();
+
+		mapper.map(campeonato, champion, "champion");
+
+		return champion;
+	}
+	
+	public static void main(String[] args) {
+		SoccerWorldChampionshipImpl cmf = new SoccerWorldChampionshipImpl();
+		
+		System.out.println("Campeon 1986: ");
+		cmf.getChampionByYear("1986");
+		
+		System.out.println("Campeones ");
+		cmf.getListChampionsWin();
+		
+		System.out.println("Campeones en 2 torneos ");
+		cmf.getListChampionsWinByQty("2");
+		
+	}
+	
+}
+```
+***
+
+Nota: uso patrón Singleton para generar un solo objeto para consumo de servicios
+
+**2. Rest para exponer los servicios**
+
+
+***Interface API***
+
+***
+```
+
 ```
 ***
 
