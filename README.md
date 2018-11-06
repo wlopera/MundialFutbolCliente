@@ -46,11 +46,12 @@ Salida:
 * Gradle Integration 2-0 [https://projects.eclipse.org/projects/tools.buildship]
 
 ## Crear de un proyecto Gradle
+
 > Nuevo Proyecto gradle - MundialesFutbol (eclipse), a desplegar en un servidor de Tomcat
 
-### Cliente para consumir Servicios Web [Proyecto MundialesFutbol]
+### Cliente para consumir Servicios Web [ver Proyecto github MundialesFutbol]
 
-**1. Archivo Gradle para generar el cliente**
+**1. Gradle para generar el cliente**
 
 ***
 ```
@@ -101,10 +102,20 @@ compileJava.dependsOn += wsdl2java
 sourceSets.main.java.srcDirs = ['src/main/java', 'build/generated-sources/cxf-ws']
 ```
 ***
-Nota:
-Crear paquete donde se genra el codigo seg+un el namespace del WSDL 
 
-http://cliente.wlopera.com/ ==> com.wlopera.cliente.cmf.soap
+Nota:
+
+Crear paquete donde se generar el codigo seg+un el namespace del WSDL 
+
+http://cliente.wlopera.com/ ==> **com.wlopera.cliente.cmf.soap**
+
+**2. Correr tarea 'install' de gradle para generar el cliente**
+
+![gradle-1](https://user-images.githubusercontent.com/7141537/48035927-16b04580-e134-11e8-808f-81d9ef294e54.png)
+
+Nota: Se puede correr el comango **git install** [uso git]
+
+
 
 **1. Entidad**
 
