@@ -472,6 +472,8 @@ public interface MundialFutbolClienteApi {
 ```
 ***
 
+![data](https://user-images.githubusercontent.com/7141537/48036849-131ebd80-e138-11e8-85cd-a0647090b40f.png)
+
 ***Implementación de los Servicios Web del Cliente [exponer servicios del cliente]***
 
 ***
@@ -554,7 +556,7 @@ public class MundialFutbolClienteImpl implements MundialFutbolClienteApi {
 ```
 ***
 
-**2. Api para exponer los servicios**
+**2. Api de negocio para exponer los servicios**
 
 ![data](https://user-images.githubusercontent.com/7141537/48036506-b8d12d00-e136-11e8-9de7-351b6d45b1fb.png)
 
@@ -777,10 +779,378 @@ public class SoccerWorldChampionshipImpl implements SoccerWorldChampionshipApi {
 ```
 ***
 
+***Dozer XML - Mapeo de datos***
+
+***
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-id="champion">
+		<class-a>com.wlopera.cliente.cmf.soap.Campeonato</class-a>
+		<class-b>com.wlopera.api.ChampionDTO</class-b>
+		<field>
+			<a>annio</a>
+			<b>year</b>
+		</field>
+		<field>
+			<a>nombreCampeon</a>
+			<b>championName</b>
+		</field>
+		<field>
+			<a>nombreSede</a>
+			<b>headquarter</b>
+		</field>	
+		<field>
+			<a>nonbreSubcampeon</a>
+			<b>subChampionName</b>
+		</field>		 			
+		<field>
+			<a>resultado</a>
+			<b>result</b>
+		</field>		 			
+	</mapping>
+</mappings>
+```
+***
+
 Nota: uso patrón Singleton para generar un solo objeto para consumo de servicios
 
 **2. Rest para exponer los servicios**
 
+
+***Wraper para envio de mensajes de respuesta - datos***
+
+***
+```
+package com.wlopera.cliente.cmf.rest;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.wlopera.api.ChampionDTO;
+
+@JsonRootName("ClientWrapper")
+public class ChampionWrapper implements Serializable {
+
+	private static final long serialVersionUID = -6453185814072830906L;
+
+	private List<ChampionDTO> champions;
+	
+	public List<ChampionDTO> getChampions() {
+		return champions;
+	}
+
+	public void setChampions(List<ChampionDTO> champions) {
+		this.champions = champions;
+	}
+
+	@Override
+	public String toString() {
+		return "ChampionWrapper [champions=" + champions + "]";
+	}
+	
+}
+```
+***
+
+***Wrapper de datos ***
+
+***
+```
+package com.wlopera.cliente.cmf.rest;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@JsonRootName("ClientWrapper")
+public class DataWrapper implements Serializable {
+
+	private static final long serialVersionUID = 7831642959650748773L;
+
+	private List<String> qtys;
+	private List<String> years;
+	
+	public List<String> getQtys() {
+		return qtys;
+	}
+
+	public void setQtys(List<String> qtys) {
+		this.qtys = qtys;
+	}
+
+	public List<String> getYears() {
+		return years;
+	}
+
+	public void setYears(List<String> years) {
+		this.years = years;
+	}
+
+	@Override
+	public String toString() {
+		return "DataWrapper [qtys=" + qtys + ", years=" + years + "]";
+	}
+	
+}
+```
+***
+
+***Clase Util con datos requeridos***
+
+***
+```
+package com.wlopera.cliente.cmf.rest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChampionUtil {
+
+	/**
+	 * Annios de los torneos
+	 * 
+	 * @author Willian Lopera
+	 * 
+	 * @return Lista de annios de los torneos
+	 */
+	public static final List<String> getYears() {
+		List<String> years = new ArrayList<>();
+		
+		years.add("1930");
+		years.add("1934");
+		years.add("1938");
+		years.add("1950");
+		years.add("1954");
+		years.add("1958");
+		years.add("1962");
+		years.add("1966");
+		years.add("1970");
+		years.add("1974");
+		years.add("1978");
+		years.add("1982");
+		years.add("1986");
+		years.add("1990");
+		years.add("1994");
+		years.add("1998");
+		years.add("2002");
+		years.add("2006");
+		years.add("2010");
+		years.add("2014");
+		years.add("2018");
+		
+		return years;
+	}
+
+	/**
+	 * Cantidad exacta de torneos ganados por un pais
+	 * 
+	 * @author Willian Lopera
+	 * 
+	 * @return Lista de cantidad exacta de torneos ganados
+	 */
+	public static final List<String> getChampionsWinQty() {
+		List<String> qty = new ArrayList<>();
+		
+		qty.add("1");
+		qty.add("2");
+		qty.add("3");
+		qty.add("4");
+		qty.add("5");
+		
+		return qty;
+	}
+}
+```
+***
+
+***Controlador***
+
+***
+```
+package com.wlopera.cliente.cmf.rest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
+import com.wlopera.api.ChampionDTO;
+import com.wlopera.api.SoccerWorldChampionshipApi;
+
+@Controller
+public class ChampionController {
+
+	protected SoccerWorldChampionshipApi swcsApi;
+
+	@Autowired
+	protected RestTemplate restTemplate;
+
+	public ChampionController(SoccerWorldChampionshipApi swcsApi) {
+		this.swcsApi = swcsApi;
+	}
+
+	/**
+	 * Go to home.
+	 * 
+	 * Probar servicio rest activo => netstat -ano | find "8585"
+	 * 
+	 * @return
+	 */
+	// http://localhost:8585/
+	@RequestMapping("/")
+	public String home() {
+		return "index";
+	}
+
+	/**
+	 * Servicio Rest Data listado de annios jugados y cantidad de torneos ganados
+	 * 
+	 * @return Listado de datos
+	 */
+	// http://localhost:8585/champion/allChampions
+	@RequestMapping(value = "/champion/data")
+	@ResponseBody
+	public DataWrapper getData() {
+
+		System.out.println("Inicio consulta servicio rest getData");
+		DataWrapper wrapper = new DataWrapper();
+
+		wrapper.setYears(ChampionUtil.getYears());
+		wrapper.setQtys(ChampionUtil.getChampionsWinQty());
+		
+		return wrapper;
+
+	}
+
+	/**
+	 * Servicio Rest listado de todos los campeonatos
+	 * 
+	 * @return Listado de campeonatos
+	 */
+	// http://localhost:8585/champion/allChampions
+	@RequestMapping(value = "/champion/allChampions")
+	@ResponseBody
+	public ChampionWrapper getAllChampions() {
+
+		System.out.println("Inicio consulta servicio rest ChampionWrapper");
+		ChampionWrapper wrapper = new ChampionWrapper();
+
+		wrapper.setChampions(swcsApi.getListChampionsWin());
+		return wrapper;
+
+	}
+
+	/**
+	 * Servicio Rest campeon por annio
+	 * 
+	 * @return Campeon para un annio requerido
+	 */
+	// http://localhost:8585/champion/championByYear/1986
+	@GetMapping(value = "/champion/championByYear/{year}")
+	@ResponseBody
+	public ChampionWrapper getChampionByYear(@PathVariable("year") String year) {
+
+		System.out.println("Inicio consulta servicio rest getChampionByYear para el año: " + year);
+		ChampionWrapper wrapper = new ChampionWrapper();
+
+		List<ChampionDTO> champions = new ArrayList<>();
+		champions.add(swcsApi.getChampionByYear(year));
+
+		wrapper.setChampions(champions);
+		
+		System.out.println("getChampionByYear: " + wrapper.getChampions().toString());
+		return wrapper;
+
+	}
+
+	/**
+	 * Servicio Rest listado de todos los campeones ganadores para una catidad
+	 * exacta de campeonatos
+	 * 
+	 * @return Listado de campeonatos
+	 */
+	// http://localhost:8585/champion/championsByWins/2
+	@GetMapping(value = "/champion/championsByWins/{numberWins}")
+	@ResponseBody
+	public ChampionWrapper getChampionsByWins(@PathVariable("numberWins") String numberWins) {
+
+		System.out.println("Inicio consulta servicio rest getChampionsByWins para partidos ganados: " + numberWins);
+		ChampionWrapper wrapper = new ChampionWrapper();
+
+		wrapper.setChampions(swcsApi.getListChampionsWinByQty(numberWins));
+		
+		System.out.println("getChampionsByWins: " + wrapper.getChampions().toString());
+		return wrapper;
+
+	}
+}
+```
+***
+
+***Aplicación para levantar servicio REST***
+
+***
+```
+package com.wlopera.cliente.cmf.rest;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.client.RestTemplate;
+
+import com.wlopera.api.SoccerWorldChampionshipApi;
+import com.wlopera.api.SoccerWorldChampionshipImpl;
+
+@SpringBootApplication // Indica que se trata de una aplicación Spring Boot
+@ComponentScan(useDefaultFilters = false) // La configuración predeterminada de escáner de componentes heredada de
+											// Spring Boot busca clases @Component y,
+											// en este caso, intenta crearlo. Sin embargo, quiero crearlo yo mismo,
+											// así que deshabilito el escáner
+public class ClientChampionRest {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ClientChampionRest.class, args);
+	}
+
+	@LoadBalanced // Asegúrese de inyectar la plantilla de carga correcta
+	@Bean
+	RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+
+	@Bean
+	public SoccerWorldChampionshipApi getSoccerWorldChampionshipApi() {
+		return new SoccerWorldChampionshipImpl();
+	}
+
+	@Bean
+	public ChampionController getChampionController() {
+		return new ChampionController(getSoccerWorldChampionshipApi());
+	}
+}
+```
+***
+
+***Interface API***
+
+***
+```
+
+```
+***
 
 ***Interface API***
 
