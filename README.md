@@ -1099,7 +1099,7 @@ public class ChampionController {
 ```
 ***
 
-***Aplicación para levantar servicio REST***
+***Aplicación para levantar servicio REST [uso SpringBootApplication]***
 
 ***
 ```
@@ -1145,19 +1145,266 @@ public class ClientChampionRest {
 ```
 ***
 
-***Interface API***
+***Archivo para configurar el servidor y uso de JS/CSS/HTML [Aplication.yml]***
 
 ***
 ```
+# Spring properties
+spring:
+  freemarker:
+    enabled: false     # Ignore Eureka dashboard FreeMarker templates
+  thymeleaf:
+    cache: false       # Allow Thymeleaf templates to be reloaded at runtime
+    prefix: classpath:/templates/    # Trailing / mandatory
+                       # Template location for this application only
 
+# Map the error path to error template (for Thymeleaf)
+error:
+  path=/error
+
+# HTTP Server
+server:
+  port: 8585   # HTTP (Tomcat) port
 ```
 ***
 
-***Interface API***
+***AngularJS - Liberias modulo/controlador***
 
 ***
 ```
+// Modulo angular
+// scope: Alcance de variables 
+// hhtp: libreria HTPP consulta de servicios REST
+var MyApp = angular.module("MyApp", []);
 
+MyApp.controller("MyController",["$scope", "service", function($scope, service){
+    	
+    	$scope.showData = false; 	// Variable para mostrar resultados
+    	$scope.champions = {};     	// Campeones encontrados en la consulta
+    	
+    	$scope.qtys = {};
+    	$scope.years = {};
+
+    	// Consultar todos los campeonatos - protocolo HTTP
+    	$scope.getAllChampions = function(){
+    	  getHttp("/champion/allChampions");
+    	};
+    	
+    	// Consultar campeon para un año requerido - protocolo HTTP
+    	$scope.getChampionByYear = function(){
+    		getHttp("/champion/championByYear/" + $scope.param);
+    	};
+    	
+    	// Consultar campeones ganadores por cantidad de ganados - protocolo HTTP
+    	$scope.getChampionsByWins = function(){
+    	  getHttp("/champion/championsByWins/" + $scope.param);       
+    	};
+    	
+    	function getHttp(uri) {
+	    	service.getHttp(uri)
+	    	.then(function(response) {
+	    		console.log(response);
+	    		$scope.showData = true;
+	    	    $scope.champions = response.data.champions;
+	        }).catch(function(err) {
+	        	$scope.showData = false;
+	            console.error("Error del servicio consulta http: ", err);
+	        });
+    	};
+
+    	function getData(uri) {
+	    	service.getHttp(uri)
+	    	.then(function(response) {
+	    		$scope.qtys = response.data.qtys;
+	    		$scope.years = response.data.years;
+	    		console.log(response);
+	        }).catch(function(err) {
+	            console.error("Error del servicio consulta http: ", err);
+	        });
+    	};
+
+    	getHttp("/champion/allChampions");
+    	getData("/champion/data");
+    	
+    	$scope.hideTable = function() {
+    		$scope.param = "";
+    		$scope.showData = false;
+    	}
+    	
+    }]);
+```
+***
+
+***AngularJS - Liberias servicios***
+
+***
+```
+MyApp.factory('service', ['$http', function($http) {
+	
+	function getHttp(uri) {
+		return $http.get(uri)      	// URI de llamada	 
+	};
+
+	return {
+		getHttp : getHttp
+	};
+	
+}]);
+```
+***
+
+***HTML***
+
+***
+```
+<!DOCTYPE html>
+<html ng-app="MyApp">
+<head>
+<meta charset="UTF-8"></meta>
+
+<!-- Libreria CCS bootstrap -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+<!-- Libreria CCS propia del aplicativo -->
+<link rel="stylesheet" href="../../css/style.css"></link>
+
+<!-- Libreria Jquery - requerida por boopstrap -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Libreria bootstrap -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Libreria angularJS -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+
+<!-- Libreria propia del aplicativo -->
+<script src="../../js/app.js"></script>
+<script src="../../js/service.js"></script>
+
+<title>Campeones Mundiales</title>
+</head>
+<body ng-controller="MyController">
+	<h1>Campeonatos Mundiales de Futbol</h1>
+	<hr></hr>
+	    <div class="row">
+        <div class="col-sm-3">
+            <a href="#" class="nav-tabs-dropdown btn btn-block btn-primary">Campeonatos</a>
+            <ul id="nav-tabs-wrapper" class="nav nav-tabs nav-pills nav-stacked well">
+              <li ng-click="getAllChampions()" class="active"><a href="#vtab1" data-toggle="tab">Todos</a></li>
+              <li ng-click="hideTable()"><a href="#vtab2" data-toggle="tab">Por año</a></li>
+              <li ng-click="hideTable()"><a href="#vtab3" data-toggle="tab">Por cantidad de ganados</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="vtab1">
+                    <pre>
+	                    <table class="table table-striped" ng-show="showData">
+						            <thead>
+						              <tr>
+						                <th>AÑO</th>
+						                <th>SEDE</th>						                
+						                <th>CAMPEÓN</th>
+						                <th>RESULTADO</th>
+						                <th>SUB-CAMPEÓN</th>
+						              </tr>
+						            </thead>
+						            <tbody>
+						              <tr ng-repeat = "champion in champions">
+						                 <td>{{champion.year}}</td>
+							               <td>{{champion.headquarter}}</td>
+							               <td>{{champion.championName}}</td>
+							               <td>{{champion.result}}</td>
+							               <td>{{champion.subChampionName}}</td>
+						              </tr>
+						            </tbody>
+						          </table>
+                    </pre>                    
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="vtab2">
+	                <div>
+             				Año del campeonato: 
+             				<select ng-model="param" ng-options="year for year in years"></select>
+             				<button ng-click="getChampionByYear()">Consulta</button>
+             			</div>	                		
+	                <pre>
+                      <table class="table table-striped" ng-show="showData">
+						            <thead>
+						              <tr>
+						                <th>AÑO</th>
+						                <th>SEDE</th>						                
+						                <th>CAMPEÓN</th>
+						                <th>RESULTADO</th>
+						                <th>SUB-CAMPEÓN</th>
+						              </tr>
+						            </thead>
+						            <tbody>
+						              <tr ng-repeat = "champion in champions">
+						                 <td>{{champion.year}}</td>
+							               <td>{{champion.headquarter}}</td>
+							               <td>{{champion.championName}}</td>
+							               <td>{{champion.result}}</td>
+							               <td>{{champion.subChampionName}}</td>
+						              </tr>
+						            </tbody>
+						          </table>
+					          </div>	                			
+                 </pre>
+							  <div role="tabpanel" class="tab-pane fade in" id="vtab3">
+							    <div>
+             				Cantidad de torneos ganados: 
+             				<select ng-model="param" ng-options="qty for qty in qtys"></select>             				
+             				<button ng-click="getChampionsByWins()">Consulta</button>
+             			</div>	                			               
+                	<pre>
+	                    <table class="table table-striped" ng-show="showData">
+						            <thead>
+						              <tr>
+						                <th>AÑO</th>
+						                <th>SEDE</th>						                
+						                <th>CAMPEÓN</th>
+						                <th>RESULTADO</th>
+						                <th>SUB-CAMPEÓN</th>
+						              </tr>
+						            </thead>
+						            <tbody>
+						              <tr ng-repeat = "champion in champions">
+						                 <td>{{champion.year}}</td>
+							               <td>{{champion.headquarter}}</td>
+							               <td>{{champion.championName}}</td>
+							               <td>{{champion.result}}</td>
+							               <td>{{champion.subChampionName}}</td>
+						              </tr>
+						            </tbody>
+						          </table>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+```
+***
+
+Nota: uso de Patrón MVC
+
+***AngularJS - Liberias modulo/servicios/controlador [Patrón MVC]***
+
+***
+```
+```
+***
+
+***AngularJS - Liberias modulo/servicios/controlador [Patrón MVC]***
+
+***
+```
 ```
 ***
 
