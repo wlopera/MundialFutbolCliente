@@ -779,7 +779,7 @@ public class SoccerWorldChampionshipImpl implements SoccerWorldChampionshipApi {
 ```
 ***
 
-***Dozer XML - Mapeo de datos***
+***Dozer XML - Mapeo de datos [champion-mapping.xml]***
 
 ***
 ```
@@ -819,6 +819,7 @@ Nota: uso patrón Singleton para generar un solo objeto para consumo de servicio
 
 **2. Rest para exponer los servicios**
 
+![data](https://user-images.githubusercontent.com/7141537/48037158-3bf38280-e139-11e8-9d9f-0eaceff3cd39.png)
 
 ***Wraper para envio de mensajes de respuesta - datos***
 
